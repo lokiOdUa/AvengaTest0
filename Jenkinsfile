@@ -41,7 +41,7 @@ pipeline {
                 // --rm: Automatically removes the container when it exits.
                 // -e: Sets the environment variable inside the container.
                 // -v: Mounts the host's report directory to the container's report directory.
-                sh "docker run --rm -e BASE_URL=${env.BASE_URL} -v ${pwd()}/${REPORTS_DIR}:/app/reports ${DOCKER_IMAGE_NAME}"
+                sh "/Users/loki/.rd/bin/docker run --rm -e BASE_URL=${env.BASE_URL} -v ${pwd()}/${REPORTS_DIR}:/app/reports ${DOCKER_IMAGE_NAME}"
             }
         }
 
