@@ -1,0 +1,14 @@
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd" >
+
+<suite name="FakeRESTApiTestSuite">
+    <test name="AllApiTests">
+        <classes>
+            <class name="info.dvad.avengatest.tests.AuthorsTest"/>
+            <class name="info.dvad.avengatest.tests.BooksTest"/>
+        </classes>
+    </test>
+    
+    <listeners>
+        <listener class-name="info.dvad.avengatest.utils.ExtentReportManager"></listener>
+    </listeners>
+</suite>
