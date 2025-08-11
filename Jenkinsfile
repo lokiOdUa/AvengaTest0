@@ -41,11 +41,6 @@ pipeline {
             publishHTML(target: [
                     allowMissing: false,
                     alwaysLinkToLastBuild: true,
-                    contentSecurityPolicy: """
-                        script-src 'self' 'unsafe-inline';
-                        style-src 'self' 'unsafe-inline' cdn.jsdelivr.net stackpath.bootstrapcdn.com;
-                        font-src 'self' stackpath.bootstrapcdn.com data:;
-                    """,
                     keepAll: true,
                     reportDir: REPORTS_DIR,
                     reportFiles: '**.html',
