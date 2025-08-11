@@ -54,7 +54,10 @@ public class BookDto {
         if (publishDate == null) {
             return null;
         }
-        // Below block is needed since FakeRESTApi tends to skip final zero from milliseconds
+// Below block is needed since FakeRESTApi tends to lose final zero from milliseconds, i.e.
+// Expected: 2025-03-28T01:41:11.620Z
+// Actual:   2025-03-28T01:41:11.62Z
+// IRL I would create a ticket for this issue
         var pd = publishDate.toString();
         if (pd.charAt(pd.length() - 2) == '0') {
             StringBuilder sb = new StringBuilder(pd);

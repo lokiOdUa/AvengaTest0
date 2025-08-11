@@ -41,6 +41,7 @@ pipeline {
             publishHTML(target: [
                     allowMissing: false,
                     alwaysLinkToLastBuild: true,
+                    contentSecurityPolicy: "script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline';",
                     keepAll: true,
                     reportDir: REPORTS_DIR,
                     reportFiles: '**.html',
