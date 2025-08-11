@@ -54,7 +54,15 @@ public class BookDto {
         if (publishDate == null) {
             return null;
         }
-        return publishDate.toString();
+        // Below block is needed since FakeRESTApi tends to skip final zero from milliseconds
+        var pd = publishDate.toString();
+        if (pd.charAt(pd.length() - 2) == '0') {
+            StringBuilder sb = new StringBuilder(pd);
+            return sb.deleteCharAt(pd.length() - 2).toString();
+        }
+        else {
+            return pd;
+        }
     }
 
     // Setters
