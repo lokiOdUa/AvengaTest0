@@ -26,28 +26,23 @@ pipeline {
                 sh "docker run --rm -e BASE_URL=${env.BASE_URL} -v ${pwd()}/${REPORTS_DIR}:/app/reports ${DOCKER_IMAGE_NAME}"
             }
         }
-
-//        stage('Publish Test Report') {
-        post {
-            always {
-                echo "Archiving and publishing HTML report from '${REPORTS_DIR}'..."
-                publishHTML(target: [
-                        allowMissing: false,
-                        alwaysLinkToLastBuild: true,
-                        keepAll: true,
-                        reportDir: REPORTS_DIR,
-                        reportFiles: '**.html',
-                        reportName: 'FakeRESTApi Test Report'
-                ])
-            }
-        }
     }
 
-//    post {
-//        always {
+    post {
+        always {
+            echo "Archiving and publishing HTML report from '${REPORTS_DIR}'..."
+            publishHTML(target: [
+                    allowMissing: false,
+                    alwaysLinkToLastBuild: true,
+                    keepAll: true,
+                    reportDir: REPORTS_DIR,
+                    reportFiles: '**.html',
+                    reportName: 'FakeRESTApi Test Report'
+            ])
+
 //            echo "Cleaning up the workspace and Docker image."
 //            cleanWs()
 //            sh "docker rmi ${DOCKER_IMAGE_NAME} || true"
-//        }
-//    }
+        }
+    }
 }
