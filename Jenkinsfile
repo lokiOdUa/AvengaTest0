@@ -27,8 +27,9 @@ pipeline {
             }
         }
 
-        stage('Publish Test Report') {
-            steps {
+//        stage('Publish Test Report') {
+        post {
+            always {
                 echo "Archiving and publishing HTML report from '${REPORTS_DIR}'..."
                 publishHTML(target: [
                         allowMissing: false,
