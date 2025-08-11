@@ -1,8 +1,16 @@
 pipeline {
     agent any
 
+    parameters {
+        string(
+                name: 'BASE_URL_PARAM',
+                defaultValue: 'https://fakerestapi.azurewebsites.net/api/v1',
+                description: 'The base URL for the FakeRESTApi tests'
+        )
+    }
+
     environment {
-        BASE_URL = 'https://fakerestapi.azurewebsites.net/api/v1'
+        FakeRESTApi = "${params.BASE_URL_PARAM}"
         DOCKER_IMAGE_NAME = "seva-makhinia/avengatest:${env.BUILD_NUMBER}"
         REPORTS_DIR = 'reports'
     }
@@ -12,7 +20,6 @@ pipeline {
             steps {
                 script {
                     echo "Building Docker image: ${DOCKER_IMAGE_NAME}"
-                    sh "whoami"
                     docker.build(DOCKER_IMAGE_NAME, '.')
                 }
             }
@@ -39,10 +46,6 @@ pipeline {
                     reportFiles: '**.html',
                     reportName: 'FakeRESTApi Test Report'
             ])
-
-//            echo "Cleaning up the workspace and Docker image."
-//            cleanWs()
-//            sh "docker rmi ${DOCKER_IMAGE_NAME} || true"
         }
     }
 }
