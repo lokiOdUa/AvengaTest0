@@ -10,7 +10,7 @@ pipeline {
     }
 
     environment {
-        FakeRESTApi = "${params.BASE_URL_PARAM}"
+        BASE_URL = "${params.BASE_URL_PARAM}"
         DOCKER_IMAGE_NAME = "seva-makhinia/avengatest:${env.BUILD_NUMBER}"
         REPORTS_DIR = 'reports'
     }
