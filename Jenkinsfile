@@ -3,9 +3,7 @@ pipeline {
 
     environment {
         BASE_URL = 'https://fakerestapi.azurewebsites.net/api/v1'
-
         DOCKER_IMAGE_NAME = "seva-makhinia/avengatest:${env.BUILD_NUMBER}"
-
         REPORTS_DIR = 'reports'
     }
 
@@ -37,20 +35,18 @@ pipeline {
                         alwaysLinkToLastBuild: true,
                         keepAll: true,
                         reportDir: REPORTS_DIR,
-                        reportFiles: '**.html', // This wildcard finds your uniquely named report file
-                        reportName: 'API Test Report'
+                        reportFiles: '**.html',
+                        reportName: 'FakeRESTApi Test Report'
                 ])
             }
         }
     }
 
-    post {
-        always {
-            echo "Cleaning up the workspace and Docker image."
-
-            cleanWs()
-
-            sh "docker rmi ${DOCKER_IMAGE_NAME} || true"
-        }
-    }
+//    post {
+//        always {
+//            echo "Cleaning up the workspace and Docker image."
+//            cleanWs()
+//            sh "docker rmi ${DOCKER_IMAGE_NAME} || true"
+//        }
+//    }
 }
