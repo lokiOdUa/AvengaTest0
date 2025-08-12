@@ -8,7 +8,8 @@ import java.util.Objects;
 /**
  * Data Transfer Object (DTO) representing a Book.
  * This class encapsulates the properties of a Book and provides methods to access these properties.
- * It is used to transfer data between layers of the application, such as between the business logic layer and the presentation layer.
+ * It is used to transfer data between layers of the application, such as between the business logic
+ * layer and the presentation layer.
  */
 public class BookDto {
     @JsonProperty("id")

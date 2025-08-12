@@ -21,7 +21,7 @@ import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
 
 public class BooksTest extends RootClass {
-    protected static Logger logger = LoggerFactory.getLogger(AuthorsTest.class);
+    private static final Logger logger = LoggerFactory.getLogger(BooksTest.class);
 
     /**
      * Verifies the integrity and expected size of the book collection endpoint.

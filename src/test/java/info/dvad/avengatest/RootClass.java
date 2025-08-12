@@ -1,6 +1,5 @@
 package info.dvad.avengatest;
 
-import info.dvad.avengatest.tests.AuthorsTest;
 import io.restassured.RestAssured;
 import net.datafaker.Faker;
 import org.slf4j.Logger;
@@ -10,7 +9,7 @@ import io.github.cdimascio.dotenv.Dotenv;
 
 public class RootClass {
     protected Faker faker = new Faker();
-    protected static Logger logger = LoggerFactory.getLogger(AuthorsTest.class);
+    private static final Logger logger = LoggerFactory.getLogger(RootClass.class);
 
     @BeforeSuite
     public void setup() {

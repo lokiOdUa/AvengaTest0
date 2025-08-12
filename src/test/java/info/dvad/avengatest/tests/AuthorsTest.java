@@ -17,7 +17,7 @@ import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.equalTo;
 
 public class AuthorsTest extends RootClass {
-    protected static Logger logger = LoggerFactory.getLogger(AuthorsTest.class);
+    private static final Logger logger = LoggerFactory.getLogger(AuthorsTest.class);
 
     /**
      * Verifies the integrity and expected size of the authors collection endpoint.
@@ -100,10 +100,11 @@ public class AuthorsTest extends RootClass {
      * It then validates the data from this second request to ensure the author's details
      * were correctly persisted and can be retrieved.</li>
      * </ol>
-     * The test includes a special check for a known limitation of FakeRESTApi where it does not
-     * create any essences. If the returned ID is 0, the test is failed intentionally. Although,
-     * once you uncomment "authorId = 3;" before the AssertionError, and set "(invocationCount = 100)"
-     * for this scenario, you should see it green at least a few times.
+     * The test includes a special check for a known limitation of FakeRESTApi - it does not
+     * create any essences but returns more-less random values instead. If the returned ID is 0,
+     * the test is failed intentionally. Although, once you uncomment "authorId = 3;" before the
+     * AssertionError, and set "(invocationCount = 100)" for this scenario, you should see it
+     * green at least a few times.
      */
     @Test
     public void shouldBeAbleToAddAuthor() {
@@ -133,42 +134,46 @@ public class AuthorsTest extends RootClass {
 
 //        authorId = 3;   // Uncomment it to mimic actual checking of author just created
         if (authorId == 0) {
-            throw new AssertionError("Sorry guys but FakeRESTApi is really fake so we can't add author in fact. Sad but " +
-                    "true. But please review tests' Javadocs since it's in your hands to get it green!");
+            throw new AssertionError("Sorry guys but FakeRESTApi is really fake so we can't add author in " +
+                    "fact. Sad but true. But please review tests' Javadoc since it's in your hands to get it green!");
         }
         else {
-            AuthorDto authorResponse =
-                given()
-                .when()
-                    .get("/Authors/" + authorId)
+            ensureAuthorWasAddedSuccessfully(authorId, bookId);
+        }
+    }
+
+    private void ensureAuthorWasAddedSuccessfully(int authorId, int bookId) {
+        AuthorDto authorResponse =
+            given()
+            .when()
+                .get("/Authors/" + authorId)
+        .then()
+            .statusCode(200)
+            .extract()
+            .as(AuthorDto.class);
+
+        logger.info("Successfully retrieved data of the author {}", authorResponse);
+
+        AuthorDto[] booksResponse =
+            given()
+            .when()
+                .get("/Authors/authors/books/" + bookId)
             .then()
                 .statusCode(200)
                 .extract()
-                .as(AuthorDto.class);
+                .as(AuthorDto[].class);
 
-            logger.info("Successfully retrieved data of the author {}", authorResponse);
+        logger.info("Successfully retrieved list of {} items of authors books {}", booksResponse.length, booksResponse);
 
-            AuthorDto[] booksResponse =
-                given()
-                .when()
-                    .get("/Authors/authors/books/" + bookId)
-                .then()
-                    .statusCode(200)
-                    .extract()
-                    .as(AuthorDto[].class);
+        SoftAssert softAssert = new SoftAssert();
+        softAssert.assertEquals(authorResponse.getId(), (Integer) authorId, "ID of author should match");
+        softAssert.assertEquals(authorResponse.getIdBook(), (Integer) bookId, "ID of book should match");
+        softAssert.assertTrue(
+                Arrays.stream(booksResponse).anyMatch(author -> author.getId() == authorId),
+                "At least one book should be from our author"
+        );
 
-            logger.info("Successfully retrieved list of {} items of authors books {}", booksResponse.length, booksResponse);
-
-            SoftAssert softAssert = new SoftAssert();
-            softAssert.assertEquals(authorResponse.getId(), (Integer) authorId, "ID of author should match");
-            softAssert.assertEquals(authorResponse.getIdBook(), (Integer) bookId, "ID of book should match");
-            softAssert.assertTrue(
-                    Arrays.stream(booksResponse).anyMatch(author -> author.getId() == authorId),
-                    "At least one book should be from our author"
-            );
-
-            softAssert.assertAll();
-        }
+        softAssert.assertAll();
     }
 
     /**
